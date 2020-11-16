@@ -1,0 +1,89 @@
+---
+title: "CC-group15"
+author: "Liyuan Tang and Tianqi Lou"
+date: "2020/11/1"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Package used
+
+```{r,warning=FALSE,message=FALSE}
+library(vcd)
+library(MASS)
+library(vcdExtra)
+library(tidyverse)
+
+```
+
+## Sample Mosaic plot
+
+```{r}
+mosaic(HairEyeColor, shade = TRUE)
+```
+
+## Two Categories with formula
+
+```{r}
+mosaic(Eye~Sex , data = HairEyeColor, highlighting_fill = 
+         c("sandybrown","lightblue", "saddlebrown","lightgreen"),split_vertical = TRUE)
+```
+
+## Multiple Categories with formula:
+```{r fig.width=12}
+mosaic(Eye ~Sex + Hair, data = HairEyeColor, highlighting_fill = 
+         c("sandybrown", "lightblue", "saddlebrown", "lightgreen"), split_vertical = TRUE)
+
+```
+
+## Paired Mosaic Plot:
+```{r fig.height=16, fig.width=12}
+data("DoctorVisits", package = "AER")
+df3<-DoctorVisits%>%
+  mutate(numvisits=fct_collapse(as.character(visits),
+                                "0"="0",
+                                "1"="1",
+                                "2+"=c("2","3","4","5","6","7","8","9")),
+         .keep="all")
+df_ct = as.data.frame(table(df3[, c(2,8,9,10,11,12,13)]))
+pairs(xtabs(Freq ~ ., df_ct), shade = TRUE)
+```
+
+
+## Association Plot
+```{r}
+assoc(HairEyeColor, shade=TRUE)
+```
+
+## Mosaics for glm() Models
+```{r fig.height = 16,fig.width=12}
+indep <- glm(Freq ~ mental + ses, family = poisson, data = Mental) # independence model
+mosaic(indep, ~ses+mental, residuals_type="rstandard",
+      main="Mental health data: Independence")
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
